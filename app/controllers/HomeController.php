@@ -1,9 +1,10 @@
 <?php
 /**
  * Class HomeController
- * @author yuuki.takezawa<yuuki.takezawa@excite.jp>
+ * @author yuuki.takezawa<yuuki.takezawa@comnect.jp.net>
  */
-class HomeController extends BaseController {
+class HomeController extends \BaseController
+{
 
 	public function getIndex()
 	{

@@ -2,8 +2,11 @@
 namespace Commands;
 use Illuminate\Console\Command;
 use Predis\Async\Client as AsyncClient;
+
 /**
  * Class SubscribeCommand
+ * @package Commands
+ * @author yuuki.takezawa<yuuki.takezawa@comnect.jp.net>
  */
 class SubscribeCommand extends Command {
 
@@ -30,19 +33,24 @@ class SubscribeCommand extends Command {
 		$client->connect(function ($client)
 		{
 			$this->info('redis subscribe start');
+			// 非同期
 			$redis = new AsyncClient($this->connection, $client->getEventLoop());
-
 			// "subscriber" チャンネル登録
-			$client->pubsub('subscriber', function ($event) use ($redis)
+			$client->pubsub('channel:subscriber', function ($event) use ($redis)
 			{
-				var_dump($event);
+				var_dump(
+					$event->kind,
+					$event->channel,
+					$event->payload
+				);
 				// 受信したメッセージをlistにpush
 				//$redis->rpush("{$event->channel}", $event->payload, function () use ($event) {
 				//	echo "Stored message `{$event->payload}` from {$event->channel}.\n";
 				//});
 			});
 		});
-		$client->getEventLoop()->run();
-	}
+		$loop = $client->getEventLoop();
 
+		$loop->run();
+	}
 }

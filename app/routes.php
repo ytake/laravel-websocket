@@ -11,3 +11,5 @@
 |
 */
 Route::get('/', 'HomeController@getIndex');
+
+Route::resource('emit', 'EmitController');

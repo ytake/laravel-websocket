@@ -5,6 +5,8 @@ use PHPSocketIO\SocketIO;
 use PHPSocketIO\Connection;
 use PHPSocketIO\Response\Response;
 use PHPSocketIO\Event;
+use PHPSocketIO\Http\WebSocket\WebSocket;
+use PHPSocketIO\Http\Http;
 use Symfony\Component\Console\Input\InputOption;
 /**
  * Class IoCommand
@@ -23,12 +25,19 @@ class IoCommand extends Command {
 	 */
 	protected $description = "boot socket.io server";
 
+	/** @var \PHPSocketIO\SocketIO */
 	protected $socketIo;
+	/** @var \PHPSocketIO\Http\WebSocket\WebSocket */
+	protected $websocket;
+	/** @var \PHPSocketIO\Http\Http */
+	protected $http;
 
 	public function __construct()
 	{
 		parent::__construct();
-		$this->socketIo = \App::make("PHPSocketIO\SocketIO", ["baseEvent" => null]);
+		$this->socketIo = \App::make("PHPSocketIO\SocketIO");
+		$this->websocket = \App::make("PHPSocketIO\Http\WebSocket\WebSocket");
+		$this->http = \App::make("PHPSocketIO\Http\Http");
 	}
 
 	/**
@@ -36,12 +45,28 @@ class IoCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->socketIo->listen($this->option('port'))->onConnect(function(Connection $connection)
+/*
+		$chat = $this->socketIo->getSockets()
+			->on('addme', function(Event\MessageEvent $messageEvent) use (&$chat) {
+				$messageEvent->getConnection()->emit(
+					'update',
+					array('msg' => "Welcome {$messageEvent->getMessage()}")
+				);
+				$chat->emit('update', array('msg' => "{$messageEvent->getMessage()} is coming."));
+			})
+			->on('msg', function(Event\MessageEvent $messageEvent) use (&$chat) {
+				$message = $messageEvent->getMessage();
+				$chat->emit('update', $message);
+			});
+*/
+
+		$this->socketIo->listen($this->option('port'))
+		->onConnect(function(Connection $connection)
 		{
 			list($host, $port) = $connection->getRemote();
-			echo "connected $host:$port\n";
-		})->dispatch();
-
+			$this->info("connected $host:$port");
+		})
+		->dispatch();
 	}
 
 	/**
