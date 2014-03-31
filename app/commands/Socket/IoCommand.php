@@ -40,7 +40,8 @@ class IoCommand extends Command {
 		{
 			list($host, $port) = $connection->getRemote();
 			echo "connected $host:$port\n";
-			})->dispatch();
+		})->dispatch();
+
 	}
 
 	/**
