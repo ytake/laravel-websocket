@@ -8,6 +8,7 @@ use PHPSocketIO\Event;
 use PHPSocketIO\Http\WebSocket\WebSocket;
 use PHPSocketIO\Http\Http;
 use Symfony\Component\Console\Input\InputOption;
+
 /**
  * Class IoCommand
  * @package Commands\Socket
@@ -59,7 +60,7 @@ class IoCommand extends Command {
 				$chat->emit('update', $message);
 			});
 */
-
+		$this->info("port {$this->option('port')}. socket.io server boot");
 		$this->socketIo->listen($this->option('port'))
 		->onConnect(function(Connection $connection)
 		{
@@ -67,6 +68,7 @@ class IoCommand extends Command {
 			$this->info("connected $host:$port");
 		})
 		->dispatch();
+
 	}
 
 	/**

@@ -107,7 +107,8 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-		"App\Providers\PublishServiceProvider"
+		"App\Providers\PublishServiceProvider",
+		"App\Providers\SubscribeServiceProvider"
 	),
 
 	/*

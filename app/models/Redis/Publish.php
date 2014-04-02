@@ -1,5 +1,5 @@
 <?php
-namespace Models;
+namespace Models\Redis;
 use Models\Interfaces\PublishInterface;
 
 /**
@@ -19,4 +19,5 @@ class Publish implements PublishInterface{
 	{
 		return \Redis::connection('default')->publish(self::PUBLISH_CHANNEL, json_encode($array));
 	}
-} 
+
+}

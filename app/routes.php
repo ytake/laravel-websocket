@@ -11,5 +11,5 @@
 |
 */
 Route::get('/', 'HomeController@getIndex');
-
 Route::resource('emit', 'EmitController');
+Route::resource('socket', 'SocketIoController');

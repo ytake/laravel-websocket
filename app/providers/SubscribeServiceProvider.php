@@ -7,11 +7,10 @@ use Illuminate\Support\ServiceProvider;
  * @package App\Providers
  * @author yuuki.takezawa<yuuki.takezawa@comnect.jp.net>
  */
-class PublishServiceProvider extends ServiceProvider{
-
+class SubscribeServiceProvider extends ServiceProvider{
 	//
 	public function register()
 	{
-		$this->app->bind("Models\Interfaces\PublishInterface", "Models\Redis\Publish");
+		$this->app->bind("Models\Interfaces\SubscribeInterface", "Models\Redis\Subscribe");
 	}
-} 
+}
