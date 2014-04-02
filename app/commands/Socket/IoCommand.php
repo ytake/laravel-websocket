@@ -46,6 +46,8 @@ class IoCommand extends Command {
 	 */
 	public function fire()
 	{
+
+
 		$chat = $this->socketIo->getSockets()
 			->on('addme', function(Event\MessageEvent $messageEvent) use (&$chat) {
 				$messageEvent->getConnection()->emit(
@@ -61,23 +63,25 @@ class IoCommand extends Command {
 			});
 
 		$this->info("port {$this->option('port')}. socket.io server boot");
-		$this->socketIo->listen($this->option('port'))
-		->onConnect(function(Connection $connection)
-		{
-			list($host, $port) = $connection->getRemote();
-			$this->info("connected $host:$port");
-		})
-			->onRequest('/', function($connection, \EventHttpRequest $request) {
 
-					$response = new Response(file_get_contents(__DIR__.'/web/index.html'));
+		$this->socketIo->listen($this->option('port'))
+			->onConnect(function(Connection $connection)
+			{
+				list($host, $port) = $connection->getRemote();
+				$this->info("connected $host:$port");
+
+			})
+			->onRequest('/socket', function($connection, \EventHttpRequest $request) {
+
+					$response = new Response($this->_dispatch('/socket', 'GET'));
 					$response->setContentType('text/html', 'UTF-8');
 					$connection->sendResponse($response);
 				})
-			->onRequest('/socket.io.js', function($connection, \EventHttpRequest $request) {
-					$response = new Response(file_get_contents(__DIR__.'/web/socket.io.js'));
+			->onRequest('/socket.io.min.js', function($connection, \EventHttpRequest $request) {
+					$response = new Response(file_get_contents(base_path('public/dist/scoket.io.min.js')));
 					$response->setContentType('text/html', 'UTF-8');
 					$connection->sendResponse($response);
-				})
+			})
 		->dispatch();
 	}
 
@@ -90,5 +94,19 @@ class IoCommand extends Command {
 		return [
 			['port', 'p', InputOption::VALUE_OPTIONAL, 'port specified.', 3000]
 		];
+	}
+
+	/**
+	 * @access private
+	 * @param $uri
+	 * @param $method
+	 * @param array $data
+	 * @return mixed
+	 */
+	private function _dispatch($uri, $method, array $data = array())
+	{
+		$request = \Request::create($uri, $method, $data);
+		\Request::replace($request->input());
+		return \Route::dispatch($request)->getContent();
 	}
 }

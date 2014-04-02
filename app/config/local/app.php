@@ -108,7 +108,8 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
 		"App\Providers\PublishServiceProvider",
-		"App\Providers\SubscribeServiceProvider"
+		"App\Providers\SubscribeServiceProvider",
+		"App\Providers\PubSubServiceProvider",
 	),
 
 	/*
@@ -177,4 +178,5 @@ return array(
 
 	),
 
+	'socket_connection' => 'tcp://127.0.0.1:5555',
 );

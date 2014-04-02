@@ -30,6 +30,15 @@
 	$(function(){
 		var myname = null;
 		var socket = io.connect('http://127.0.0.1:3000/');
+		socket.on("connect", function (){
+
+			console.log("connection is opened.");
+		})
+
+		socket.on("disconnect", function (client){
+			console.log(client);
+			console.log("connection is closed.");
+		});
 		socket.on('update',function(data) {
 			if(data.msg == '/clear') {
 				$('#content').empty();
