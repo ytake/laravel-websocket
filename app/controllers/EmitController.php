@@ -9,7 +9,9 @@ class EmitController extends \BaseController {
 	/** @var \Models\Interfaces\PublishInterface  */
 	protected $publish;
 
-
+	/**
+	 * @param PublishInterface $publish
+	 */
 	public function __construct(PublishInterface $publish)
 	{
 		$this->publish = $publish;

@@ -1,5 +1,6 @@
 <?php
 namespace Commands;
+
 use Illuminate\Console\Command;
 use Models\Websocket;
 use Predis\Async\Client as AsyncClient;
@@ -19,13 +20,10 @@ class SubscribeCommand extends Command {
 	/** @var array */
 	protected $connection;
 
-	protected $subscribe;
-
 	public function __construct()
 	{
 		parent::__construct();
 		$this->connection = \Config::get('database.redis.default');
-
 	}
 
 	/**

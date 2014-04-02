@@ -1,12 +1,9 @@
 <?php
 namespace Commands\Socket;
 use Illuminate\Console\Command;
-use PHPSocketIO\SocketIO;
 use PHPSocketIO\Connection;
 use PHPSocketIO\Response\Response;
 use PHPSocketIO\Event;
-use PHPSocketIO\Http\WebSocket\WebSocket;
-use PHPSocketIO\Http\Http;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
@@ -33,6 +30,9 @@ class IoCommand extends Command {
 	/** @var \PHPSocketIO\Http\Http */
 	protected $http;
 
+	/**
+	 *
+	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -46,20 +46,20 @@ class IoCommand extends Command {
 	 */
 	public function fire()
 	{
-/*
 		$chat = $this->socketIo->getSockets()
 			->on('addme', function(Event\MessageEvent $messageEvent) use (&$chat) {
 				$messageEvent->getConnection()->emit(
 					'update',
 					array('msg' => "Welcome {$messageEvent->getMessage()}")
 				);
+
 				$chat->emit('update', array('msg' => "{$messageEvent->getMessage()} is coming."));
 			})
 			->on('msg', function(Event\MessageEvent $messageEvent) use (&$chat) {
 				$message = $messageEvent->getMessage();
 				$chat->emit('update', $message);
 			});
-*/
+
 		$this->info("port {$this->option('port')}. socket.io server boot");
 		$this->socketIo->listen($this->option('port'))
 		->onConnect(function(Connection $connection)
@@ -67,8 +67,18 @@ class IoCommand extends Command {
 			list($host, $port) = $connection->getRemote();
 			$this->info("connected $host:$port");
 		})
-		->dispatch();
+			->onRequest('/', function($connection, \EventHttpRequest $request) {
 
+					$response = new Response(file_get_contents(__DIR__.'/web/index.html'));
+					$response->setContentType('text/html', 'UTF-8');
+					$connection->sendResponse($response);
+				})
+			->onRequest('/socket.io.js', function($connection, \EventHttpRequest $request) {
+					$response = new Response(file_get_contents(__DIR__.'/web/socket.io.js'));
+					$response->setContentType('text/html', 'UTF-8');
+					$connection->sendResponse($response);
+				})
+		->dispatch();
 	}
 
 	/**
