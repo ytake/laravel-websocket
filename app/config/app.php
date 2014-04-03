@@ -110,6 +110,7 @@ return array(
 		"App\Providers\DatastoreServiceProvider",
 		"App\Providers\PubSubServiceProvider",
 		"App\Providers\Server\PublishServiceProvider",
+		"App\Providers\Server\IoServiceProvider",
 	),
 
 	/*

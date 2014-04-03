@@ -1,10 +1,15 @@
 <?php
-namespace Commands\Socket;
+namespace App\Commands\Socket;
+
 use Illuminate\Console\Command;
 use PHPSocketIO\Connection;
 use PHPSocketIO\Response\Response;
 use PHPSocketIO\Event;
 use Symfony\Component\Console\Input\InputOption;
+use PHPSocketIO\SocketIO;
+use PHPSocketIO\Http\WebSocket\WebSocket;
+use PHPSocketIO\Http\Http;
+use PHPSocketIO\Response\ResponseInterface;
 
 /**
  * Class IoCommand
@@ -29,13 +34,17 @@ class IoCommand extends Command {
 	protected $websocket;
 	/** @var \PHPSocketIO\Http\Http */
 	protected $http;
+	/** @var \PHPSocketIO\Response\ResponseInterface */
+	protected $response;
 
-	public function __construct()
+	public function __construct(SocketIO $socketIo, WebSocket $websocket, Http $http, ResponseInterface $response)
 	{
 		parent::__construct();
-		$this->socketIo = \App::make("PHPSocketIO\SocketIO");
-		$this->websocket = \App::make("PHPSocketIO\Http\WebSocket\WebSocket");
-		$this->http = \App::make("PHPSocketIO\Http\Http");
+		$this->socketIo = $socketIo;
+		$this->websocket = $websocket;
+		$this->http = $http;
+		$this->response = $response;
+
 	}
 
 	/**
@@ -43,7 +52,6 @@ class IoCommand extends Command {
 	 */
 	public function fire()
 	{
-
 		$chat = $this->socketIo->getSockets()
 			->on('message', function(Event\MessageEvent $messageEvent) use (&$chat){
 				$message = $messageEvent->getMessage();
@@ -57,16 +65,15 @@ class IoCommand extends Command {
 			{
 				list($host, $port) = $connection->getRemote();
 				$this->info("connected $host:$port");
-
 			})
 			->onRequest('/socket', function($connection, \EventHttpRequest $request) {
-
-					$response = new Response($this->_dispatch('/socket', 'GET'));
+					//$content
+					$response = $this->response->setContent($this->_dispatch('/socket', 'GET'));
 					$response->setContentType('text/html', 'UTF-8');
 					$connection->sendResponse($response);
 				})
 			->onRequest('/dist/socket.io.min.js', function($connection, \EventHttpRequest $request) {
-					$response = new Response(file_get_contents(base_path('public/dist/socket.io.min.js')));
+					$response = $this->response->setContent(file_get_contents(base_path('public/dist/socket.io.min.js')));
 					$response->setContentType('text/html', 'UTF-8');
 					$connection->sendResponse($response);
 			})
