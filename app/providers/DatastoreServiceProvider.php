@@ -3,14 +3,14 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class PublishServiceProvider
+ * Class DatastoreServiceProvider
  * @package App\Providers
  * @author yuuki.takezawa<yuuki.takezawa@comnect.jp.net>
  */
-class SubscribeServiceProvider extends ServiceProvider{
+class DatastoreServiceProvider extends ServiceProvider{
 	//
 	public function register()
 	{
-		$this->app->bind("Models\Interfaces\SubscribeInterface", "Models\Redis\Subscribe");
+		$this->app->bind("Models\Interfaces\DatastoreInterface", "Models\Redis\Datastore");
 	}
 }

@@ -39,7 +39,7 @@ return array(
 	|
 	*/
 
-	'timezone' => 'UTC',
+	'timezone' => 'Asia/Tokyo',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -107,8 +107,9 @@ return array(
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider',
-		"App\Providers\PublishServiceProvider",
-		"App\Providers\SubscribeServiceProvider"
+		"App\Providers\DatastoreServiceProvider",
+		"App\Providers\PubSubServiceProvider",
+		"App\Providers\Server\PublishServiceProvider",
 	),
 
 	/*
@@ -174,7 +175,7 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-
 	),
 
+	'socket_connection' => 'tcp://127.0.0.1:5555',
 );

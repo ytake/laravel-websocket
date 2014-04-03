@@ -1,7 +1,6 @@
 <?php
 namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
-
 /**
  * Class PublishServiceProvider
  * @package App\Providers
@@ -13,6 +12,7 @@ class PubSubServiceProvider extends ServiceProvider{
 
 	public function register()
 	{
+
 		$this->app->bind("Model\Interfaces\AsyncInterface", function(){
 			return new \Models\Redis\Async(new \ZMQContext());
 		});

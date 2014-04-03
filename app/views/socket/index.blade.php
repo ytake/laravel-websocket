@@ -1,67 +1,54 @@
 @extends('layout.default')
-@section('link')
-<style>
-	#content {
-		width: 400px;
-		height: 280px;
-		border: 1px solid;
-		overflow: auto;
-		float: left;
-	}
-	#content >div{
-		border-bottom: 1px solid;
-	}
-	#content >div >label {
-		color: green;
-	}
-	#content >div >span {
-		color: blue;
-		display: inline-block;
-		width: 50px;
-	}
-</style>
-@stop
 @section('content')
-<div id='content'></div>
-<form>
-	<input type='text' value='' /><input type='submit' value='send' />
-</form>
+<div class="starter-template">
+	<h1>socket.io sample</h1>
+	<form class="form-horizontal" role="form">
+		<div class="form-group">
+			{{Form::label('body', 'body', ['class' => 'col-sm-2 control-label'])}}
+			<div class="col-sm-10">
+				{{Form::text('body', null, ['id' => 'body', 'class' => 'form-control', 'placeholder' => 'body'])}}
+			</div>
+		</div>
+		<div class="form-group">
+			<div class="col-sm-offset-2 col-sm-10">
+				{{Form::button('publish', ['id' => 'emit', 'class' => 'btn btn-default'])}}
+			</div>
+		</div>
+	</form>
+	<div id="content"></div>
+</div>
 <script>
-	$(function(){
-		var myname = null;
-		var socket = io.connect('http://127.0.0.1:3000/');
+	"use strict";
+	$(document).ready(function(){
+
+		$("#emit").bind('keydown', function(e) {
+			if (e.keyCode == 13) {
+				e.preventDefault();
+			}
+		});
+		var socket = io.connect('http://127.0.0.1:3000');
+
 		socket.on("connect", function (){
 
 			console.log("connection is opened.");
-		})
-
+		});
 		socket.on("disconnect", function (client){
 			console.log(client);
 			console.log("connection is closed.");
 		});
-		socket.on('update',function(data) {
-			if(data.msg == '/clear') {
-				$('#content').empty();
-				return;
-			}
-			if(data.user) {
-				$('#content').append('<div><span>'+data.user+':</span>'+data.msg+'</div>');
-			}
-			else {
-				$('#content').append('<div><label>'+data.msg+'</label></div>');
-			}
+		socket.on('error', function(event){
+			console.log(event);
 		});
-		$('form').submit(function() {
-			if(myname == null) {
-				myname = prompt("yourname");
-				socket.emit('addme', myname);
-			}
-			socket.emit('msg', {
-				msg: $('input[type=text]').val(),
-				user: myname
+		socket.on('message',function(data){
+			$("#content").append(
+				"<blockquote><p>" + data.body + "</p></blockquote>"
+			);
+		});
+
+		$("#emit").click(function(event){
+			socket.emit('message', {
+				body: $("#body").val()
 			});
-			$('input[type=text]').val('');
-			return false;
 		});
 	});
 </script>

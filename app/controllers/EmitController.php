@@ -1,20 +1,20 @@
 <?php
-use \Models\Interfaces\PublishInterface;
+use \Models\Interfaces\DatastoreInterface;
 /**
  * Class EmitController
  * @author yuuki.takezawa<yuuki.takezawa@comnect.jp.net>
  */
 class EmitController extends \BaseController {
 
-	/** @var \Models\Interfaces\PublishInterface  */
-	protected $publish;
+	/** @var \Models\Interfaces\DatastoreInterface  */
+	protected $datastore;
 
 	/**
-	 * @param PublishInterface $publish
+	 * @param DatastoreInterface $datastore
 	 */
-	public function __construct(PublishInterface $publish)
+	public function __construct(DatastoreInterface $datastore)
 	{
-		$this->publish = $publish;
+		$this->datastore = $datastore;
 	}
 
 	/**
@@ -24,8 +24,9 @@ class EmitController extends \BaseController {
 	 */
 	public function index()
 	{
-		//
-		return \View::make('emit.index');
+		$view = \View::make('emit.index');
+		$view->with('list', $this->datastore->get());
+		return $view;
 	}
 
 	/**
@@ -45,7 +46,7 @@ class EmitController extends \BaseController {
 	 */
 	public function store()
 	{
-		if($this->publish->publish(['body' => \Input::get('body', null)]))
+		if($this->datastore->publish(['body' => \Input::get('body', null)]))
 		{
 			return \Response::json(json_encode(['result' => true]) ,200);
 		}

@@ -34,8 +34,8 @@ class Async implements AsyncInterface {
 		{
 			//
 			$redis = new AsyncClient($this->connection, $client->getEventLoop());
-			// "subscriber" チャンネル登録
-			$client->pubsub('channel:subscriber', function ($event) use ($redis)
+			// subscribe channel
+			$client->pubsub(\Config::get('pubsub.basic_channel'), function ($event) use ($redis)
 			{
 				$socket = $this->context->getSocket(\ZMQ::SOCKET_PUSH, 'push');
 				$socket->connect(\Config::get('app.socket_connection'));

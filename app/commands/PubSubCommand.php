@@ -1,7 +1,6 @@
 <?php
 namespace App\Commands;
 
-use Models\Interfaces\PullInterface;
 use Models\Websocket;
 use Illuminate\Console\Command;
 use Models\Interfaces\AsyncInterface;
@@ -16,7 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 class PubSubCommand extends Command {
 
 	/** @var string */
-	protected $name = 'websocket:subscribe';
+	protected $name = 'websocket:server';
 	/** @var string */
 	protected $description = "webscoket subscribe server";
 	/** @var \Models\Interfaces\AsyncInterface */
@@ -27,7 +26,6 @@ class PubSubCommand extends Command {
 	/**
 	 * @param AsyncInterface $loop
 	 * @param WampServerInterface $wamp
-	 * @param PullInterface $pull
 	 */
 	public function __construct(AsyncInterface $loop, WampServerInterface $wamp)
 	{

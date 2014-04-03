@@ -1,16 +1,16 @@
 <?php
-use \Models\Interfaces\PublishInterface;
+use \Models\Interfaces\DatastoreInterface;
 /**
  * Class EmitController
  * @author yuuki.takezawa<yuuki.takezawa@comnect.jp.net>
  */
 class SocketIoController extends \BaseController {
 
-	/** @var \Models\Interfaces\PublishInterface  */
+	/** @var \Models\Interfaces\DatastoreInterface  */
 	protected $publish;
 
 
-	public function __construct(PublishInterface $publish)
+	public function __construct(DatastoreInterface $publish)
 	{
 		$this->publish = $publish;
 	}

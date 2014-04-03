@@ -30,9 +30,6 @@ class IoCommand extends Command {
 	/** @var \PHPSocketIO\Http\Http */
 	protected $http;
 
-	/**
-	 *
-	 */
 	public function __construct()
 	{
 		parent::__construct();
@@ -47,19 +44,10 @@ class IoCommand extends Command {
 	public function fire()
 	{
 
-
 		$chat = $this->socketIo->getSockets()
-			->on('addme', function(Event\MessageEvent $messageEvent) use (&$chat) {
-				$messageEvent->getConnection()->emit(
-					'update',
-					array('msg' => "Welcome {$messageEvent->getMessage()}")
-				);
-
-				$chat->emit('update', array('msg' => "{$messageEvent->getMessage()} is coming."));
-			})
-			->on('msg', function(Event\MessageEvent $messageEvent) use (&$chat) {
+			->on('message', function(Event\MessageEvent $messageEvent) use (&$chat){
 				$message = $messageEvent->getMessage();
-				$chat->emit('update', $message);
+				$chat->emit('message', $message);
 			});
 
 		$this->info("port {$this->option('port')}. socket.io server boot");
@@ -77,8 +65,8 @@ class IoCommand extends Command {
 					$response->setContentType('text/html', 'UTF-8');
 					$connection->sendResponse($response);
 				})
-			->onRequest('/socket.io.min.js', function($connection, \EventHttpRequest $request) {
-					$response = new Response(file_get_contents(base_path('public/dist/scoket.io.min.js')));
+			->onRequest('/dist/socket.io.min.js', function($connection, \EventHttpRequest $request) {
+					$response = new Response(file_get_contents(base_path('public/dist/socket.io.min.js')));
 					$response->setContentType('text/html', 'UTF-8');
 					$connection->sendResponse($response);
 			})
