@@ -2,10 +2,8 @@ laravel-websocket
 =================
 
 websocket, socket.io sample  
-
-
-php extension dependencies
-
+**require Redis**
+#php extension dependencies
 zeromq php extension http://zeromq.org/bindings:php   
 event extension http://pecl.php.net/package/event  
 phpiredis extension https://github.com/nrk/phpiredis  
@@ -14,18 +12,18 @@ phpiredis extension https://github.com/nrk/phpiredis
 $ composer update
 ```
 #artisan commands  
-##websocket server boot.
+##websocket server boot.(use redis pubsub)
 ```bash
 $ php artisan websocket:server
 ```
---port (-p) port (default: 3000)  
+option --port (-p) port (default: 3000)  
 ##publish to websocket server from command line  
 ```bash
 $ php artisan websocket:publish
 ```
---body (-b) send message (default: "publish form server")  
-##php socket.io server sample  
+option --body (-b) send message (default: "publish form server")  
+##php socket.io server sample(basic socket.io)  
 ```bash
 $ php artisan websocket:io
 ```
---port (-p) port (default: 3000)  
+option --port (-p) port (default: 3000)  
