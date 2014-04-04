@@ -79,3 +79,16 @@ App::down(function()
 */
 
 require app_path().'/filters.php';
+
+/**
+ * add
+ */
+App::error(function(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception, $code)
+{
+	return \Response::make('not found', 404);
+});
+
+App::error(function(\Predis\Connection\ConnectionException $exception, $code)
+{
+	return "Redis {$exception->getMessage()}";
+});
