@@ -48,7 +48,7 @@ class EmitController extends \BaseController {
 	{
 		if($this->datastore->publish(['body' => \Input::get('body', null)]))
 		{
-			return \Response::json(json_encode(['result' => true]) ,200);
+			return \Response::json(['result' => true] ,200);
 		}
 	}
 
