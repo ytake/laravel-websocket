@@ -1,8 +1,12 @@
 <?php
-namespace Models\Interfaces;
+namespace App\Reactive;
 
-interface DatastoreInterface {
-
+/**
+ * Interface DataStoreInterface
+ * @package Models\Interfaces
+ */
+interface DataStoreInterface
+{
 	/**
 	 * @param array $array
 	 * @return mixed
