@@ -1,11 +1,12 @@
 <?php
-namespace Models\Interfaces;
+namespace App\Reactive;
 
 /**
  * Interface AsyncInterface
  * @package Models\Interfaces
  */
-interface AsyncInterface {
+interface AsyncInterface
+{
 
 	public function async();
 }
